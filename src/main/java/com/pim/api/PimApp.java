@@ -1,13 +1,13 @@
-package com.pim.productinformationmanagement;
+package com.pim.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProductInformationManagementApplication {
+public class PimApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProductInformationManagementApplication.class, args);
+		SpringApplication.run(PimApp.class, args);
 	}
 
 }
