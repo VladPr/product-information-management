@@ -1,4 +1,4 @@
-package com.pim.api.model;
+package com.pim.model;
 
 import jakarta.persistence.*;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.pim.api.model;
+package com.pim.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -18,9 +18,6 @@ public class Price {
 
     @Column(nullable = false)
     private UUID productId;
-
-    @Column(nullable = false)
-    private String currency;
 
     @Column(nullable = false)
     private BigDecimal amount;
