@@ -1,16 +1,15 @@
 package com.pim.model;
 
-
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
-import lombok.*;
-    @Getter
-    @Setter
 
-
+@Getter
+@Setter
 @Entity
 public class Product {
 
@@ -23,15 +22,16 @@ public class Product {
 
     @ElementCollection
     @CollectionTable(name = "product_name_translations", joinColumns = @JoinColumn(name = "product_id"))
-    @MapKeyColumn(name = "language")
+    @MapKeyColumn(name = "language_code") // Store language codes like "en", "fr", etc.
     @Column(name = "name")
     private Map<String, String> name;
 
     @ElementCollection
     @CollectionTable(name = "product_description_translations", joinColumns = @JoinColumn(name = "product_id"))
-    @MapKeyColumn(name = "language")
+    @MapKeyColumn(name = "language_code")
     @Column(name = "description")
     private Map<String, String> description;
+
 
     @Column(nullable = false)
     private UUID categoryId;
@@ -50,5 +50,4 @@ public class Product {
 
     @Column(nullable = false)
     private Timestamp updatedAt;
-
 }
