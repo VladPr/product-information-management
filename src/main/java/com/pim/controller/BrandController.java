@@ -17,44 +17,38 @@ import java.util.UUID;
 public class BrandController {
 
     private final BrandService brandService;
-    private final BrandRepository brandRepository;
 
     public BrandController(BrandService brandService, BrandRepository brandRepository) {
         this.brandService = brandService;
-        this.brandRepository = brandRepository;
     }
 
-    @GetMapping
+    @GetMapping("/read/all")
     public List<Brand> getAllBrands() {
         return brandService.getAllBrands();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public Brand getBrandById(@PathVariable UUID id) {
         return brandService.getBrandById(id);
     }
 
-    @PostMapping
-    public Brand createBrand(@RequestBody BrandDTO brandDTO) {
-        return brandService.createBrand(brandDTO);
+    @PostMapping("/create")
+    public ResponseEntity<List<Brand>> createBrands(@RequestBody List<BrandDTO> brandDTOs) {
+        List<Brand> savedBrands = brandService.createBrands(brandDTOs);
+        return ResponseEntity.ok(savedBrands);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Brand updateBrand(@PathVariable UUID id, @RequestBody BrandDTO brandDTO) {
         return brandService.updateBrand(id, brandDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteBrand(@PathVariable UUID id) {
         brandService.deleteBrand(id);
     }
 
-    @GetMapping("/count")
-    public Long countBrands() {
-        return brandService.countBrands();
-    }
-
-    @GetMapping("/{id}/products")
+    @GetMapping("/read/{id}/products")
     public Optional<List<Product>> getProductsByBrand(@PathVariable UUID id) {
         return brandService.getProductsByBrandId(id);
     }
