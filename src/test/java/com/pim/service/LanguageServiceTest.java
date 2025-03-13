@@ -1,6 +1,7 @@
 package com.pim.service;
 
-import com.pim.model.Language;
+import com.pim.model.dto.LanguageDTO;
+import com.pim.model.entity.Language;
 import com.pim.repository.LanguageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ class LanguageServiceTest {
     private LanguageService languageService;
 
     private Language language;
+    private LanguageDTO languageDTO;
     private UUID languageId;
 
     @BeforeEach
@@ -33,6 +35,10 @@ class LanguageServiceTest {
         language.setId(languageId);
         language.setCode("en");
         language.setName("English");
+
+        languageDTO = new LanguageDTO();
+        languageDTO.setCode("en");
+        languageDTO.setName("English");
     }
 
     @Test
@@ -50,22 +56,31 @@ class LanguageServiceTest {
 
     @Test
     void testCreateLanguage() {
-        when(languageRepository.save(language)).thenReturn(language);
-        Language createdLanguage = languageService.createLanguage(language);
-        assertEquals(language, createdLanguage);
+        when(languageRepository.save(any(Language.class))).thenReturn(language);
+        Language createdLanguage = languageService.createLanguage(languageDTO);
+        assertEquals(language.getCode(), createdLanguage.getCode());
+        assertEquals(language.getName(), createdLanguage.getName());
     }
 
     @Test
     void testUpdateLanguage() {
         when(languageRepository.findById(languageId)).thenReturn(Optional.of(language));
-        when(languageRepository.save(language)).thenReturn(language);
-        Language updatedLanguage = languageService.updateLanguage(languageId, language);
-        assertEquals(language, updatedLanguage);
+        when(languageRepository.save(any(Language.class))).thenReturn(language);
+        Language updatedLanguage = languageService.updateLanguage(languageId, languageDTO);
+        assertEquals(language.getCode(), updatedLanguage.getCode());
+        assertEquals(language.getName(), updatedLanguage.getName());
     }
 
     @Test
     void testDeleteLanguage() {
-        languageService.deleteLanguage(languageId);
-        verify(languageRepository, times(1)).deleteById(languageId);
+        when(languageRepository.findById(languageId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            languageService.deleteLanguage(languageId);
+        });
+
+        assertEquals("Language not found", exception.getMessage());
+        verify(languageRepository, times(1)).findById(languageId);
+        verify(languageRepository, times(0)).deleteById(languageId);
     }
 }

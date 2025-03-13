@@ -1,0 +1,142 @@
+[
+  {
+    "productSku": "MILK-001",
+    "amount": {
+      "EUR": 3.29,
+      "USD": 3.59
+    }
+  },
+  {
+    "productSku": "MILK-002",
+    "amount": {
+      "EUR": 2.79,
+      "USD": 2.99
+    }
+  },
+  {
+    "productSku": "YGRT-001",
+    "amount": {
+      "EUR": 4.49,
+      "USD": 4.99
+    }
+  },
+  {
+    "productSku": "YGRT-002",
+    "amount": {
+      "EUR": 3.99,
+      "USD": 4.49
+    }
+  },
+  {
+    "productSku": "CHSE-001",
+    "amount": {
+      "EUR": 5.99,
+      "USD": 6.49
+    }
+  },
+  {
+    "productSku": "CHSE-002",
+    "amount": {
+      "EUR": 6.99,
+      "USD": 7.49
+    }
+  },
+  {
+    "productSku": "BUTR-001",
+    "amount": {
+      "EUR": 3.49,
+      "USD": 3.79
+    }
+  },
+  {
+    "productSku": "BUTR-002",
+    "amount": {
+      "EUR": 3.69,
+      "USD": 3.99
+    }
+  },
+  {
+    "productSku": "CRME-001",
+    "amount": {
+      "EUR": 4.29,
+      "USD": 4.59
+    }
+  },
+  {
+    "productSku": "CRME-002",
+    "amount": {
+      "EUR": 3.79,
+      "USD": 3.99
+    }
+  },
+  {
+    "productSku": "ICEC-001",
+    "amount": {
+      "EUR": 5.49,
+      "USD": 5.99
+    }
+  },
+  {
+    "productSku": "ICEC-002",
+    "amount": {
+      "EUR": 5.49,
+      "USD": 5.99
+    }
+  },
+  {
+    "productSku": "APPL-001",
+    "amount": {
+      "EUR": 3.99,
+      "USD": 4.29
+    }
+  },
+  {
+    "productSku": "BANA-001",
+    "amount": {
+      "EUR": 2.49,
+      "USD": 2.79
+    }
+  },
+  {
+    "productSku": "ORNG-001",
+    "amount": {
+      "EUR": 3.49,
+      "USD": 3.89
+    }
+  },
+  {
+    "productSku": "STRW-001",
+    "amount": {
+      "EUR": 4.99,
+      "USD": 5.49
+    }
+  },
+  {
+    "productSku": "BLUE-001",
+    "amount": {
+      "EUR": 5.49,
+      "USD": 5.99
+    }
+  },
+  {
+    "productSku": "TOMA-001",
+    "amount": {
+      "EUR": 3.29,
+      "USD": 3.59
+    }
+  },
+  {
+    "productSku": "CUCU-001",
+    "amount": {
+      "EUR": 1.99,
+      "USD": 2.29
+    }
+  },
+  {
+    "productSku": "LETT-001",
+    "amount": {
+      "EUR": 2.79,
+      "USD": 2.99
+    }
+  }
+]

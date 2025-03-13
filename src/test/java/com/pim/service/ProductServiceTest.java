@@ -1,6 +1,8 @@
 package com.pim.service;
 
-import com.pim.model.Product;
+import com.pim.model.dto.ProductDTO;
+import com.pim.model.entity.Product;
+import com.pim.model.entity.ProductNameTranslation;
 import com.pim.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,10 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,7 +37,8 @@ public class ProductServiceTest {
         productId = UUID.randomUUID();
         product = new Product();
         product.setId(productId);
-        product.setName(Map.of("en", "Test Product"));
+        ProductNameTranslation nameTranslation = new ProductNameTranslation("en", "Test Product", product);
+        product.setNameTranslations(Set.of(nameTranslation));
         logger.info("Set up test data with productId: {}", productId);
     }
 
@@ -77,10 +77,20 @@ public class ProductServiceTest {
     @Test
     public void testCreateProduct() {
         logger.info("Starting testCreateProduct");
-        when(productRepository.save(product)).thenReturn(product);
-        Product createdProduct = productService.createProduct(product);
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setSku(product.getSku());
+        productDTO.setCategoryName("Test Category");
+        productDTO.setBrandName("Test Brand");
+        productDTO.setSupplierName("Test Supplier");
+        productDTO.setNameTranslations(Map.of("en", "Test Product"));
+        productDTO.setDescription(Map.of("en", "Test Description"));
+
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+        Product createdProduct = productService.createProduct(productDTO);
+
         assertNotNull(createdProduct);
-        assertEquals(product, createdProduct);
+        assertEquals(product.getSku(), createdProduct.getSku());
         logger.info("Finished testCreateProduct");
     }
 
@@ -88,19 +98,25 @@ public class ProductServiceTest {
     public void testUpdateProduct() {
         logger.info("Starting testUpdateProduct");
         String updatedName = "Updated Product";
-        Product updatedProduct = new Product();
-        updatedProduct.setName(Map.of("en", updatedName));
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setSku(product.getSku());
+        productDTO.setCategoryName("Updated Category");
+        productDTO.setBrandName("Updated Brand");
+        productDTO.setSupplierName("Updated Supplier");
+        productDTO.setNameTranslations(Map.of("en", updatedName));
+        productDTO.setDescription(Map.of("en", "Updated Description"));
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        when(productRepository.save(product)).thenReturn(product);
+        when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        Product result = productService.updateProduct(productId, updatedProduct);
+        Product result = productService.updateProduct(productId, productDTO);
 
         assertNotNull(result);
-        assertEquals(updatedName, result.getName().get("en"));
+        assertEquals(updatedName, result.getNameTranslations().iterator().next().getNameTranslation());
 
         verify(productRepository).findById(productId);
-        assertEquals(updatedName, product.getName().get("en"));
+        assertEquals(updatedName, product.getNameTranslations().iterator().next().getNameTranslation());
 
         logger.info("Finished testUpdateProduct");
     }

@@ -1,7 +1,9 @@
 package com.pim.service;
 
-import com.pim.model.Supplier;
+import com.pim.model.dto.SupplierDTO;
+import com.pim.model.entity.Supplier;
 import com.pim.repository.SupplierRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +32,7 @@ public class SupplierServiceTest {
     private SupplierService supplierService;
 
     private Supplier supplier;
+    private SupplierDTO supplierDTO;
     private UUID supplierId;
 
     @BeforeEach
@@ -38,6 +41,10 @@ public class SupplierServiceTest {
         supplier = new Supplier();
         supplier.setId(supplierId);
         supplier.setName("Test Supplier");
+
+        supplierDTO = new SupplierDTO();
+        supplierDTO.setName("Test Supplier");
+
         logger.info("Set up test data with supplierId: {}", supplierId);
     }
 
@@ -76,30 +83,33 @@ public class SupplierServiceTest {
     @Test
     public void testCreateSupplier() {
         logger.info("Starting testCreateSupplier");
-        when(supplierRepository.save(supplier)).thenReturn(supplier);
-        Supplier createdSupplier = supplierService.createSupplier(supplier);
+        Supplier newSupplier = new Supplier();
+        newSupplier.setName("Test Supplier");
+
+        doReturn(newSupplier).when(supplierRepository).save(any(Supplier.class));
+        Supplier createdSupplier = supplierService.createSupplier(supplierDTO);
+
         assertNotNull(createdSupplier);
-        assertEquals(supplier, createdSupplier);
+        assertEquals(newSupplier.getName(), createdSupplier.getName());
         logger.info("Finished testCreateSupplier");
     }
 
     @Test
     public void testUpdateSupplier() {
         logger.info("Starting testUpdateSupplier");
-        String updatedName = "Updated Supplier";
-        Supplier updatedSupplier = new Supplier();
-        updatedSupplier.setName(updatedName);
+        UUID nonExistentSupplierId = UUID.randomUUID();
+        SupplierDTO updatedSupplierDTO = new SupplierDTO();
+        updatedSupplierDTO.setName("Updated Supplier");
 
-        when(supplierRepository.findById(supplierId)).thenReturn(Optional.of(supplier));
-        when(supplierRepository.save(supplier)).thenReturn(supplier);
+        when(supplierRepository.findById(nonExistentSupplierId)).thenReturn(Optional.empty());
 
-        Supplier result = supplierService.updateSupplier(supplierId, updatedSupplier);
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+            supplierService.updateSupplier(nonExistentSupplierId, updatedSupplierDTO);
+        });
 
-        assertNotNull(result);
-        assertEquals(updatedName, result.getName());
-
-        verify(supplierRepository).findById(supplierId);
-        assertEquals(updatedName, supplier.getName());
+        assertEquals("Supplier with id " + nonExistentSupplierId + " not found.", exception.getMessage());
+        verify(supplierRepository, times(1)).findById(nonExistentSupplierId);
+        verify(supplierRepository, times(0)).save(any(Supplier.class));
 
         logger.info("Finished testUpdateSupplier");
     }

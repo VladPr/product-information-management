@@ -1,6 +1,7 @@
 package com.pim.controller;
 
-import com.pim.model.Price;
+import com.pim.model.dto.PriceDTO;
+import com.pim.model.entity.Price;
 import com.pim.service.PriceService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,17 +29,32 @@ public class PriceController {
     }
 
     @PostMapping
-    public Price createPrice(@RequestBody Price price) {
-        return priceService.createPrice(price);
+    public Price createPrice(@RequestBody PriceDTO priceDTO) {
+        return priceService.createPrice(priceDTO);
     }
 
     @PutMapping("/{id}")
-    public Price updatePrice(@PathVariable UUID id, @RequestBody Price price) {
-        return priceService.updatePrice(id, price);
+    public Price updatePrice(@PathVariable UUID id, @RequestBody PriceDTO priceDTO) {
+        return priceService.updatePrice(id, priceDTO);
     }
 
     @DeleteMapping("/{id}")
     public void deletePrice(@PathVariable UUID id) {
         priceService.deletePrice(id);
+    }
+
+    @DeleteMapping
+    public void deleteAllPrices() {
+        priceService.deleteAllPrices();
+    }
+
+    @GetMapping("/count")
+    public Long countPrices() {
+        return priceService.countPrices();
+    }
+
+    @PostMapping ("/batch-upload")
+    public List<Price> batchUploadPrices(@RequestBody List<PriceDTO> pricesDTO) {
+        return priceService.saveAllPrices(pricesDTO);
     }
 }

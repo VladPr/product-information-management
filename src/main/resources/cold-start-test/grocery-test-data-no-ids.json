@@ -1,0 +1,505 @@
+{
+  "languages": [
+    {
+      "code": "en",
+      "name": "English"
+    },
+    {
+      "code": "fr",
+      "name": "French"
+    }
+  ],
+  "brands": [
+    {
+      "name": "Nature's Best"
+    },
+    {
+      "name": "Farm Fresh"
+    },
+    {
+      "name": "Gourmet Select"
+    },
+    {
+      "name": "Organic Valley"
+    },
+    {
+      "name": "Daily Harvest"
+    }
+  ],
+  "suppliers": [
+    {
+      "name": "Global Foods Distribution",
+      "contactEmail": "contact@globalfoods.com",
+      "phoneNumber": "+1-555-123-4567",
+      "address": "123 Supply Chain Rd, Logistics City, LC 12345"
+    },
+    {
+      "name": "Fresh Connect Logistics",
+      "contactEmail": "orders@freshconnect.com",
+      "phoneNumber": "+1-555-789-0123",
+      "address": "456 Produce Ave, Farmington, FV 67890"
+    },
+    {
+      "name": "Premium Grocery Supply",
+      "contactEmail": "info@premiumgrocery.com",
+      "phoneNumber": "+1-555-456-7890",
+      "address": "789 Warehouse Blvd, Distribution Park, DP 54321"
+    }
+  ],
+  "categories": [
+    {
+      "name": {
+        "en": "Dairy",
+        "fr": "Produits laitiers"
+      }
+    },
+    {
+      "name": {
+        "en": "Produce",
+        "fr": "Fruits et légumes"
+      }
+    },
+    {
+      "name": {
+        "en": "Bakery",
+        "fr": "Boulangerie"
+      }
+    },
+    {
+      "name": {
+        "en": "Pantry",
+        "fr": "Garde-manger"
+      }
+    },
+    {
+      "name": {
+        "en": "Frozen Foods",
+        "fr": "Surgelés"
+      }
+    }
+  ],
+  "products": [
+    {
+      "sku": "MILK-001",
+      "name": {
+        "en": "Organic Whole Milk",
+        "fr": "Lait entier biologique"
+      },
+      "description": {
+        "en": "Fresh organic whole milk from grass-fed cows. Rich in nutrients and delicious taste.",
+        "fr": "Lait entier biologique frais provenant de vaches nourries à l'herbe. Riche en nutriments et au goût délicieux."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Organic Valley",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "MILK-002",
+      "name": {
+        "en": "Low-Fat Milk",
+        "fr": "Lait à faible teneur en matières grasses"
+      },
+      "description": {
+        "en": "Low-fat milk with all the essential nutrients. Perfect for your daily calcium needs.",
+        "fr": "Lait à faible teneur en matières grasses avec tous les nutriments essentiels. Parfait pour vos besoins quotidiens en calcium."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "YGRT-001",
+      "name": {
+        "en": "Greek Yogurt",
+        "fr": "Yaourt grec"
+      },
+      "description": {
+        "en": "Thick and creamy Greek yogurt. High in protein and probiotic cultures.",
+        "fr": "Yaourt grec épais et crémeux. Riche en protéines et en cultures probiotiques."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Nature's Best",
+      "supplierName": "Global Foods Distribution"
+    },
+    {
+      "sku": "YGRT-002",
+      "name": {
+        "en": "Strawberry Yogurt",
+        "fr": "Yaourt à la fraise"
+      },
+      "description": {
+        "en": "Creamy yogurt with real strawberry pieces. A delicious snack any time of day.",
+        "fr": "Yaourt crémeux aux morceaux de vraies fraises. Une collation délicieuse à tout moment de la journée."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "CHSE-001",
+      "name": {
+        "en": "Aged Cheddar",
+        "fr": "Cheddar affiné"
+      },
+      "description": {
+        "en": "Premium aged cheddar cheese with a sharp, distinctive flavor.",
+        "fr": "Fromage cheddar affiné de qualité supérieure avec une saveur corsée et distinctive."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Gourmet Select",
+      "supplierName": "Premium Grocery Supply"
+    },
+    {
+      "sku": "CHSE-002",
+      "name": {
+        "en": "Brie Cheese",
+        "fr": "Fromage Brie"
+      },
+      "description": {
+        "en": "Soft, creamy brie cheese with a mild flavor and edible rind.",
+        "fr": "Fromage brie doux et crémeux avec une saveur légère et une croûte comestible."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Gourmet Select",
+      "supplierName": "Premium Grocery Supply"
+    },
+    {
+      "sku": "BUTR-001",
+      "name": {
+        "en": "Unsalted Butter",
+        "fr": "Beurre non salé"
+      },
+      "description": {
+        "en": "High-quality unsalted butter, perfect for cooking and baking.",
+        "fr": "Beurre non salé de haute qualité, parfait pour la cuisine et la pâtisserie."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "BUTR-002",
+      "name": {
+        "en": "Salted Butter",
+        "fr": "Beurre salé"
+      },
+      "description": {
+        "en": "Premium salted butter made from high-quality cream.",
+        "fr": "Beurre salé premium fabriqué à partir de crème de haute qualité."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Organic Valley",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "CRME-001",
+      "name": {
+        "en": "Heavy Cream",
+        "fr": "Crème épaisse"
+      },
+      "description": {
+        "en": "Fresh heavy cream perfect for whipping and cooking.",
+        "fr": "Crème fraîche épaisse parfaite pour fouetter et cuisiner."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "CRME-002",
+      "name": {
+        "en": "Sour Cream",
+        "fr": "Crème aigre"
+      },
+      "description": {
+        "en": "Tangy sour cream, perfect for toppings and dips.",
+        "fr": "Crème aigre acidulée, parfaite pour les garnitures et les trempettes."
+      },
+      "categoryName": "Dairy",
+      "brandName": "Nature's Best",
+      "supplierName": "Global Foods Distribution"
+    },
+    {
+      "sku": "ICEC-001",
+      "name": {
+        "en": "Vanilla Ice Cream",
+        "fr": "Crème glacée à la vanille"
+      },
+      "description": {
+        "en": "Creamy vanilla ice cream made with real vanilla beans.",
+        "fr": "Crème glacée à la vanille crémeuse fabriquée avec de vraies gousses de vanille."
+      },
+      "categoryName": "Frozen Foods",
+      "brandName": "Gourmet Select",
+      "supplierName": "Premium Grocery Supply"
+    },
+    {
+      "sku": "ICEC-002",
+      "name": {
+        "en": "Chocolate Ice Cream",
+        "fr": "Crème glacée au chocolat"
+      },
+      "description": {
+        "en": "Rich and decadent chocolate ice cream with premium cocoa.",
+        "fr": "Crème glacée au chocolat riche et décadente avec du cacao de qualité supérieure."
+      },
+      "categoryName": "Frozen Foods",
+      "brandName": "Gourmet Select",
+      "supplierName": "Premium Grocery Supply"
+    },
+    {
+      "sku": "APPL-001",
+      "name": {
+        "en": "Organic Apples",
+        "fr": "Pommes biologiques"
+      },
+      "description": {
+        "en": "Fresh, crisp organic apples. Perfect for snacking or baking.",
+        "fr": "Pommes biologiques fraîches et croquantes. Parfaites pour les collations ou la cuisson."
+      },
+      "categoryName": "Produce",
+      "brandName": "Organic Valley",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "BANA-001",
+      "name": {
+        "en": "Organic Bananas",
+        "fr": "Bananes biologiques"
+      },
+      "description": {
+        "en": "Sweet and nutritious organic bananas. A convenient, energy-boosting snack.",
+        "fr": "Bananes biologiques sucrées et nutritives. Une collation pratique et énergisante."
+      },
+      "categoryName": "Produce",
+      "brandName": "Nature's Best",
+      "supplierName": "Global Foods Distribution"
+    },
+    {
+      "sku": "ORNG-001",
+      "name": {
+        "en": "Fresh Oranges",
+        "fr": "Oranges fraîches"
+      },
+      "description": {
+        "en": "Juicy, vitamin-C rich oranges. Fresh from the grove.",
+        "fr": "Oranges juteuses, riches en vitamine C. Fraîches du verger."
+      },
+      "categoryName": "Produce",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "STRW-001",
+      "name": {
+        "en": "Strawberries",
+        "fr": "Fraises"
+      },
+      "description": {
+        "en": "Sweet, ripe strawberries. Great for desserts or eating fresh.",
+        "fr": "Fraises douces et mûres. Idéales pour les desserts ou à manger fraîches."
+      },
+      "categoryName": "Produce",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "BLUE-001",
+      "name": {
+        "en": "Blueberries",
+        "fr": "Myrtilles"
+      },
+      "description": {
+        "en": "Plump, antioxidant-rich blueberries. A perfect healthy snack.",
+        "fr": "Myrtilles dodues, riches en antioxydants. Une collation saine parfaite."
+      },
+      "categoryName": "Produce",
+      "brandName": "Organic Valley",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "TOMA-001",
+      "name": {
+        "en": "Vine Tomatoes",
+        "fr": "Tomates sur vigne"
+      },
+      "description": {
+        "en": "Ripe, juicy tomatoes still on the vine for maximum freshness.",
+        "fr": "Tomates mûres et juteuses encore sur la vigne pour une fraîcheur maximale."
+      },
+      "categoryName": "Produce",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    },
+    {
+      "sku": "CUCU-001",
+      "name": {
+        "en": "Cucumber",
+        "fr": "Concombre"
+      },
+      "description": {
+        "en": "Fresh, crisp cucumbers. Perfect for salads and sandwiches.",
+        "fr": "Concombres frais et croquants. Parfaits pour les salades et les sandwichs."
+      },
+      "categoryName": "Produce",
+      "brandName": "Nature's Best",
+      "supplierName": "Global Foods Distribution"
+    },
+    {
+      "sku": "LETT-001",
+      "name": {
+        "en": "Romaine Lettuce",
+        "fr": "Laitue romaine"
+      },
+      "description": {
+        "en": "Crisp, nutrient-rich romaine lettuce. The foundation of any good salad.",
+        "fr": "Laitue romaine croquante et riche en nutriments. La base de toute bonne salade."
+      },
+      "categoryName": "Produce",
+      "brandName": "Farm Fresh",
+      "supplierName": "Fresh Connect Logistics"
+    }
+  ],
+  "prices": [
+    {
+      "productSku": "MILK-001",
+      "amount": {
+        "EUR": 3.29,
+        "USD": 3.59
+      }
+    },
+    {
+      "productSku": "MILK-002",
+      "amount": {
+        "EUR": 2.79,
+        "USD": 2.99
+      }
+    },
+    {
+      "productSku": "YGRT-001",
+      "amount": {
+        "EUR": 4.49,
+        "USD": 4.99
+      }
+    },
+    {
+      "productSku": "YGRT-002",
+      "amount": {
+        "EUR": 3.99,
+        "USD": 4.49
+      }
+    },
+    {
+      "productSku": "CHSE-001",
+      "amount": {
+        "EUR": 5.99,
+        "USD": 6.49
+      }
+    },
+    {
+      "productSku": "CHSE-002",
+      "amount": {
+        "EUR": 6.99,
+        "USD": 7.49
+      }
+    },
+    {
+      "productSku": "BUTR-001",
+      "amount": {
+        "EUR": 3.49,
+        "USD": 3.79
+      }
+    },
+    {
+      "productSku": "BUTR-002",
+      "amount": {
+        "EUR": 3.69,
+        "USD": 3.99
+      }
+    },
+    {
+      "productSku": "CRME-001",
+      "amount": {
+        "EUR": 4.29,
+        "USD": 4.59
+      }
+    },
+    {
+      "productSku": "CRME-002",
+      "amount": {
+        "EUR": 3.79,
+        "USD": 3.99
+      }
+    },
+    {
+      "productSku": "ICEC-001",
+      "amount": {
+        "EUR": 5.49,
+        "USD": 5.99
+      }
+    },
+    {
+      "productSku": "ICEC-002",
+      "amount": {
+        "EUR": 5.49,
+        "USD": 5.99
+      }
+    },
+    {
+      "productSku": "APPL-001",
+      "amount": {
+        "EUR": 3.99,
+        "USD": 4.29
+      }
+    },
+    {
+      "productSku": "BANA-001",
+      "amount": {
+        "EUR": 2.49,
+        "USD": 2.79
+      }
+    },
+    {
+      "productSku": "ORNG-001",
+      "amount": {
+        "EUR": 3.49,
+        "USD": 3.89
+      }
+    },
+    {
+      "productSku": "STRW-001",
+      "amount": {
+        "EUR": 4.99,
+        "USD": 5.49
+      }
+    },
+    {
+      "productSku": "BLUE-001",
+      "amount": {
+        "EUR": 5.49,
+        "USD": 5.99
+      }
+    },
+    {
+      "productSku": "TOMA-001",
+      "amount": {
+        "EUR": 3.29,
+        "USD": 3.59
+      }
+    },
+    {
+      "productSku": "CUCU-001",
+      "amount": {
+        "EUR": 1.99,
+        "USD": 2.29
+      }
+    },
+    {
+      "productSku": "LETT-001",
+      "amount": {
+        "EUR": 2.79,
+        "USD": 2.99
+      }
+    }
+  ]
+}

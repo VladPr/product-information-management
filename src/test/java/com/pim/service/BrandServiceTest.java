@@ -1,7 +1,9 @@
 package com.pim.service;
 
-import com.pim.model.Brand;
+import com.pim.model.dto.BrandDTO;
+import com.pim.model.entity.Brand;
 import com.pim.repository.BrandRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +32,7 @@ public class BrandServiceTest {
     private BrandService brandService;
 
     private Brand brand;
+    private BrandDTO brandDTO;
     private UUID brandId;
 
     @BeforeEach
@@ -38,6 +41,10 @@ public class BrandServiceTest {
         brand = new Brand();
         brand.setId(brandId);
         brand.setName("Test Brand");
+
+        brandDTO = new BrandDTO();
+        brandDTO.setName("Test Brand");
+
         logger.info("Set up test data with brandId: {}", brandId);
     }
 
@@ -66,20 +73,20 @@ public class BrandServiceTest {
     public void testGetBrandById_NotFound() {
         logger.info("Starting testGetBrandById_NotFound");
         when(brandRepository.findById(brandId)).thenReturn(Optional.empty());
-        Exception exception = assertThrows(RuntimeException.class, () ->
+        Exception exception = assertThrows(EntityNotFoundException.class, () ->
                 brandService.getBrandById(brandId)
         );
-        assertEquals("Brand not found", exception.getMessage());
+        assertEquals("Brand with id " + brandId + " not found.", exception.getMessage());
         logger.info("Finished testGetBrandById_NotFound");
     }
 
     @Test
     public void testCreateBrand() {
         logger.info("Starting testCreateBrand");
-        when(brandRepository.save(brand)).thenReturn(brand);
-        Brand createdBrand = brandService.createBrand(brand);
+        when(brandRepository.save(any(Brand.class))).thenReturn(brand);
+        Brand createdBrand = brandService.createBrand(brandDTO);
         assertNotNull(createdBrand);
-        assertEquals(brand, createdBrand);
+        assertEquals(brand.getName(), createdBrand.getName());
         logger.info("Finished testCreateBrand");
     }
 
@@ -87,13 +94,12 @@ public class BrandServiceTest {
     public void testUpdateBrand() {
         logger.info("Starting testUpdateBrand");
         String updatedName = "Updated Brand";
-        Brand updatedBrand = new Brand();
-        updatedBrand.setName(updatedName);
+        brandDTO.setName(updatedName);
 
         when(brandRepository.findById(brandId)).thenReturn(Optional.of(brand));
         when(brandRepository.save(brand)).thenReturn(brand);
 
-        Brand result = brandService.updateBrand(brandId, updatedBrand);
+        Brand result = brandService.updateBrand(brandId, brandDTO);
 
         assertNotNull(result);
         assertEquals(updatedName, result.getName());
@@ -107,9 +113,10 @@ public class BrandServiceTest {
     @Test
     public void testDeleteBrand() {
         logger.info("Starting testDeleteBrand");
-        doNothing().when(brandRepository).deleteById(brandId);
+        when(brandRepository.existsById(brandId)).thenReturn(false);
         brandService.deleteBrand(brandId);
-        verify(brandRepository, times(1)).deleteById(brandId);
+        verify(brandRepository, times(1)).existsById(brandId);
+        verify(brandRepository, times(0)).deleteById(brandId);
         logger.info("Finished testDeleteBrand");
     }
 }

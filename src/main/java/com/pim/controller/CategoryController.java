@@ -1,7 +1,9 @@
 package com.pim.controller;
 
-import com.pim.model.Category;
+import com.pim.model.dto.CategoryDTO;
+import com.pim.model.entity.Category;
 import com.pim.service.CategoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,18 +29,29 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
-    @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    @PostMapping("/add")
+    public List<Category> addCategories(@RequestBody CategoryDTO categoryDTO) {
+        return categoryService.addCategories(categoryDTO);
     }
 
-    @PutMapping("/{id}")
-    public Category updateCategory(@PathVariable UUID id, @RequestBody Category category) {
-        return categoryService.updateCategory(id, category);
+    @PostMapping("/update/{id}")
+    public Category updateCategories(@PathVariable UUID id, @RequestBody CategoryDTO categoryDTO) {
+        return categoryService.updateCategory(id, categoryDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteCategory(@PathVariable UUID id) {
         categoryService.deleteCategory(id);
+    }
+
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<Void> deleteAllCategories() {
+        categoryService.deleteAllCategories();
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/count")
+    public Long countCategories() {
+        return categoryService.countCategories();
     }
 }

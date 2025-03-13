@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Global Foods Distribution",
+    "contactEmail": "contact@globalfoods.com",
+    "phoneNumber": "+1-555-123-4567",
+    "address": "123 Supply Chain Rd, Logistics City, LC 12345"
+  },
+  {
+    "name": "Fresh Connect Logistics",
+    "contactEmail": "orders@freshconnect.com",
+    "phoneNumber": "+1-555-789-0123",
+    "address": "456 Produce Ave, Farmington, FV 67890"
+  },
+  {
+    "name": "Premium Grocery Supply",
+    "contactEmail": "info@premiumgrocery.com",
+    "phoneNumber": "+1-555-456-7890",
+    "address": "789 Warehouse Blvd, Distribution Park, DP 54321"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "categories":{
+    "Dairy": {
+      "en": "Dairy",
+      "fr": "Produits laitiers"
+    },
+    "Produce": {
+      "en": "Produce",
+      "fr": "Fruits et légumes"
+    },
+    "Bakery": {
+      "en": "Bakery",
+      "fr": "Boulangerie"
+    },
+    "Pantry": {
+      "en": "Pantry",
+      "fr": "Garde-manger"
+    },
+    "Frozen Foods": {
+      "en": "Frozen Foods",
+      "fr": "Surgelés"
+    }
+  }
+
+}
