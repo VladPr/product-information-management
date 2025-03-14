@@ -40,14 +40,12 @@ public class SecurityConfig {
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        System.out.println("🔑 JWT_SECRET_KEY (Base64 Encoded): " + jwtSecret);
 
         // Decode Base64 key
         byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
-        System.out.println("🛑 Decoded Key Bytes: " + Arrays.toString(keyBytes));
 
         if (keyBytes.length < 32) {
-            throw new IllegalStateException("❌ JWT_SECRET_KEY must be at least 32 bytes long after decoding!");
+            throw new IllegalStateException("JWT_SECRET_KEY must be at least 32 bytes long after decoding!");
         }
 
         // ✅ Assign a key ID
@@ -56,12 +54,11 @@ public class SecurityConfig {
         // ✅ Build the JWK Key (WITHOUT `.keyType(KeyType.OCT)`)
         OctetSequenceKey jwk = new OctetSequenceKey.Builder(keyBytes)
                 .keyID(keyId)
-                .algorithm(JWSAlgorithm.HS256)  // ✅ Ensure correct algorithm
+                .algorithm(JWSAlgorithm.HS256)
                 .build();
 
         // ✅ Create JWK Set
         JWKSet jwkSet = new JWKSet(jwk);
-        System.out.println("🔑 JWK Set (for signing): " + jwkSet.toJSONObject());
 
         // ✅ Ensure Nimbus selects the correct key
         JWKSource<SecurityContext> jwkSource = (selector, context) -> selector.select(jwkSet);
@@ -69,9 +66,8 @@ public class SecurityConfig {
         // ✅ Debugging: Print selected key
         List<JWK> matchingKeys = jwkSet.getKeys();
         if (matchingKeys.isEmpty()) {
-            throw new IllegalStateException("🚨 No matching keys found in JWK Set!");
+            throw new IllegalStateException("No matching keys found in JWK Set!");
         }
-        System.out.println("✅ Nimbus JWT found signing key: " + matchingKeys.get(0).toJSONObject());
 
         return new NimbusJwtEncoder(jwkSource);
     }
