@@ -19,22 +19,22 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping("/read/all")
     public List<Category> getAllCategories() {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public Category getCategoryById(@PathVariable UUID id) {
         return categoryService.getCategoryById(id);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public List<Category> addCategories(@RequestBody CategoryDTO categoryDTO) {
         return categoryService.addCategories(categoryDTO);
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public Category updateCategories(@PathVariable UUID id, @RequestBody CategoryDTO categoryDTO) {
         return categoryService.updateCategory(id, categoryDTO);
     }
@@ -44,14 +44,9 @@ public class CategoryController {
         categoryService.deleteCategory(id);
     }
 
-    @DeleteMapping("/delete-all")
+    @DeleteMapping("/delete/delete-all")
     public ResponseEntity<Void> deleteAllCategories() {
         categoryService.deleteAllCategories();
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/count")
-    public Long countCategories() {
-        return categoryService.countCategories();
     }
 }

@@ -28,7 +28,7 @@ public class DataSourceConfigTest {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
         DataSource dataSource = context.getBean(DataSource.class);
 
-        Properties props = PropertiesLoaderUtils.loadProperties(new FileSystemResource("./.env.properties"));
+        Properties props = PropertiesLoaderUtils.loadProperties(new FileSystemResource("application-dev.properties"));
 
         assertNotNull(dataSource);
         assertEquals(DriverManagerDataSource.class, dataSource.getClass());

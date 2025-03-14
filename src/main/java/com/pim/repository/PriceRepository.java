@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface PriceRepository extends JpaRepository<Price, UUID> {
-    Price findByProductSku(String productSku);
+    Price findByProductId(UUID productId);
 }

@@ -20,7 +20,7 @@ public class ProductDescriptionTranslation {
     private String language;
     private String description;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     @JsonBackReference
     private Product product;

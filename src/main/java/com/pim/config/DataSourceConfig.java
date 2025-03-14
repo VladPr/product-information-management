@@ -1,25 +1,33 @@
 package com.pim.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.util.Properties;
 
 @Configuration
 public class DataSourceConfig {
 
+    // Inject the properties directly from application-dev.properties (or application-prod.properties based on the active profile)
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
+
+    @Value("${spring.datasource.username}")
+    private String dbUsername;
+
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
+
     @Bean
-    public DataSource dataSource() throws IOException {
-        Properties props = PropertiesLoaderUtils.loadProperties(new FileSystemResource("./.env.properties"));
+    public DataSource dataSource() {
+        // Initialize DataSource with properties from application-dev.properties
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(props.getProperty("db.url"));
-        dataSource.setUsername(props.getProperty("db.username"));
-        dataSource.setPassword(props.getProperty("db.password"));
+        dataSource.setUrl(dbUrl);
+        dataSource.setUsername(dbUsername);
+        dataSource.setPassword(dbPassword);
+
         return dataSource;
     }
 }

@@ -81,13 +81,14 @@ public class BrandServiceTest {
     }
 
     @Test
-    public void testCreateBrand() {
-        logger.info("Starting testCreateBrand");
-        when(brandRepository.save(any(Brand.class))).thenReturn(brand);
-        Brand createdBrand = brandService.createBrand(brandDTO);
-        assertNotNull(createdBrand);
-        assertEquals(brand.getName(), createdBrand.getName());
-        logger.info("Finished testCreateBrand");
+    public void testCreateBrands() {
+        logger.info("Starting testCreateBrands");
+        when(brandRepository.saveAll(anyList())).thenReturn(List.of(brand));
+        List<Brand> createdBrands = brandService.createBrands(List.of(brandDTO));
+        assertNotNull(createdBrands);
+        assertEquals(1, createdBrands.size());
+        assertEquals(brand.getName(), createdBrands.get(0).getName());
+        logger.info("Finished testCreateBrands");
     }
 
     @Test

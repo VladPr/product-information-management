@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class LanguageService {
 
@@ -40,32 +42,57 @@ public class LanguageService {
                 });
     }
 
-    public Language createLanguage(LanguageDTO languageDTO) {
-        logger.info("Attempting to create a new language: {}", languageDTO);
 
-        if (languageDTO.getName() == null || languageDTO.getName().trim().isEmpty()) {
-            throw new ConstraintViolationException("Language name cannot be null or empty", null);
-        }
+    @Transactional
+    public List<Language> createLanguages(List<LanguageDTO> languageDTOs) {
+        logger.info("Attempting to create or update languages.");
 
-        Optional<Language> existingLanguage = languageRepository.findByCode(languageDTO.getCode());
-        if (existingLanguage.isPresent()) {
-            logger.warn("Duplicate language detected: {}", languageDTO.getName());
-            throw new DataIntegrityViolationException("Language with name '" + languageDTO.getName() + "' already exists.");
-        }
+        List<Language> languages = languageDTOs.stream().map(languageDTO -> {
+            if (languageDTO.getName() == null || languageDTO.getName().trim().isEmpty()) {
+                throw new RuntimeException("Language name cannot be null or empty");
+            }
 
-        Language language = convertToEntity(languageDTO);
-        return languageRepository.save(language);
+            Optional<Language> existingLanguage = languageRepository.findByCode(languageDTO.getCode());
+            if (existingLanguage.isPresent()) {
+                logger.info("Updating existing language: {}", languageDTO.getName());
+                return updateLanguage(existingLanguage.get().getId(), languageDTO);
+            } else {
+                logger.info("Creating new language: {}", languageDTO.getName());
+                Language language = new Language();
+                language.setName(languageDTO.getName());
+                language.setCode(languageDTO.getCode());
+                return language;
+            }
+        }).collect(Collectors.toList());
+
+        return languageRepository.saveAll(languages);
     }
 
-
+    @Transactional
     public Language updateLanguage(UUID id, LanguageDTO languageDTO) {
         logger.info("Updating language with id: {}", id);
 
         Language existingLanguage = languageRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Language with id " + id + " not found."));
+                .orElseThrow(() -> {
+                    logger.warn("Attempted to update a non-existent language with id: {}", id);
+                    return new EntityNotFoundException("Language with id " + id + " not found.");
+                });
 
-        existingLanguage.setCode(languageDTO.getCode());
-        existingLanguage.setName(languageDTO.getName());
+        boolean isNameChanged = !existingLanguage.getName().equals(languageDTO.getName());
+        boolean isCodeChanged = !existingLanguage.getCode().equals(languageDTO.getCode());
+
+        if (!isNameChanged && !isCodeChanged) {
+            logger.info("No changes detected for language with id: {}", id);
+            return existingLanguage;
+        }
+
+        if (isNameChanged) {
+            existingLanguage.setName(languageDTO.getName());
+        }
+
+        if (isCodeChanged) {
+            existingLanguage.setCode(languageDTO.getCode());
+        }
 
         return languageRepository.save(existingLanguage);
     }
@@ -111,7 +138,7 @@ public class LanguageService {
         logger.info("Saving all languages");
         List<Language> languages = languageDTOs.stream()
                 .map(this::convertToEntity)
-                .collect(Collectors.toList());
+                .collect(toList());
         return languageRepository.saveAll(languages);
     }
 

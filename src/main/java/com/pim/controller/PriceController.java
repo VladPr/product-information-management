@@ -18,43 +18,43 @@ public class PriceController {
         this.priceService = priceService;
     }
 
-    @GetMapping
+    @GetMapping("/read/all")
     public List<Price> getAllPrices() {
         return priceService.getAllPrices();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public Price getPriceById(@PathVariable UUID id) {
         return priceService.getPriceById(id);
     }
 
-    @PostMapping
-    public Price createPrice(@RequestBody PriceDTO priceDTO) {
-        return priceService.createPrice(priceDTO);
+    @GetMapping("/read/product-price/{productId}")
+    public Price getPriceByProductId(@PathVariable UUID productId) {
+        return priceService.getPriceByProductId(productId);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/create")
+    public List<Price> createPrices(@RequestBody List<PriceDTO> priceDTOs) {
+        return priceService.createPrices(priceDTOs);
+    }
+
+    @PutMapping("/update/{id}")
     public Price updatePrice(@PathVariable UUID id, @RequestBody PriceDTO priceDTO) {
         return priceService.updatePrice(id, priceDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/update/product-sku/{productSku}")
+    public Price updatePriceByProductSku(@PathVariable String productSku, @RequestBody PriceDTO priceDTO) {
+        return priceService.updatePriceByProductSku(productSku, priceDTO);
+    }
+
+    @DeleteMapping("/delete/{id}")
     public void deletePrice(@PathVariable UUID id) {
         priceService.deletePrice(id);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/delete-all")
     public void deleteAllPrices() {
         priceService.deleteAllPrices();
-    }
-
-    @GetMapping("/count")
-    public Long countPrices() {
-        return priceService.countPrices();
-    }
-
-    @PostMapping ("/batch-upload")
-    public List<Price> batchUploadPrices(@RequestBody List<PriceDTO> pricesDTO) {
-        return priceService.saveAllPrices(pricesDTO);
     }
 }

@@ -27,7 +27,4 @@ public class Category {
     @JsonManagedReference
     private List<CategoryNameTranslation> nameTranslations;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Product> products;
 }

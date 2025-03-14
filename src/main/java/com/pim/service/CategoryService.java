@@ -69,14 +69,29 @@ public class CategoryService {
             throw new IllegalArgumentException("Category data cannot be empty");
         }
 
-        category.getNameTranslations().clear();
-        category.setNameTranslations(categoryDTO.getCategories().entrySet().stream()
-                .flatMap(entry -> entry.getValue().entrySet().stream()
-                        .map(langEntry -> new CategoryNameTranslation(langEntry.getKey(), langEntry.getValue(), category)))
-                .toList());
+        String newName = categoryDTO.getCategories().keySet().iterator().next();
+        Map<String, String> newTranslations = categoryDTO.getCategories().get(newName);
 
-        // Update the name of the category
-        category.setName(categoryDTO.getCategories().keySet().iterator().next());
+        boolean isNameChanged = !category.getName().equals(newName);
+        boolean areTranslationsChanged = !category.getNameTranslations().stream()
+                .collect(Collectors.toMap(CategoryNameTranslation::getLanguageCode, CategoryNameTranslation::getNameTranslation))
+                .equals(newTranslations);
+
+        if (!isNameChanged && !areTranslationsChanged) {
+            logger.info("No changes detected for category with id: {}", id);
+            return category;
+        }
+
+        if (isNameChanged) {
+            category.setName(newName);
+        }
+
+        if (areTranslationsChanged) {
+            category.getNameTranslations().clear();
+            category.setNameTranslations(newTranslations.entrySet().stream()
+                    .map(entry -> new CategoryNameTranslation(entry.getKey(), entry.getValue(), category))
+                    .toList());
+        }
 
         return categoryRepository.save(category);
     }

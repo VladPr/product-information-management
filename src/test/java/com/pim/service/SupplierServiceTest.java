@@ -80,19 +80,6 @@ public class SupplierServiceTest {
         logger.info("Finished testGetSupplierById_NotFound");
     }
 
-    @Test
-    public void testCreateSupplier() {
-        logger.info("Starting testCreateSupplier");
-        Supplier newSupplier = new Supplier();
-        newSupplier.setName("Test Supplier");
-
-        doReturn(newSupplier).when(supplierRepository).save(any(Supplier.class));
-        Supplier createdSupplier = supplierService.createSupplier(supplierDTO);
-
-        assertNotNull(createdSupplier);
-        assertEquals(newSupplier.getName(), createdSupplier.getName());
-        logger.info("Finished testCreateSupplier");
-    }
 
     @Test
     public void testUpdateSupplier() {

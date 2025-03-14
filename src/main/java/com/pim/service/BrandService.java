@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BrandService {
@@ -42,25 +43,31 @@ public class BrandService {
                 });
     }
 
-    public Brand createBrand(BrandDTO brandDTO) {
-        logger.info("Attempting to create a new brand: {}", brandDTO.getName());
+    @Transactional
+    public List<Brand> createBrands(List<BrandDTO> brandDTOs) {
+        logger.info("Attempting to create or update brands.");
 
-        if (brandDTO.getName() == null || brandDTO.getName().trim().isEmpty()) {
-            throw new RuntimeException("Brand name cannot be null or empty");
-        }
+        List<Brand> brands = brandDTOs.stream().map(brandDTO -> {
+            if (brandDTO.getName() == null || brandDTO.getName().trim().isEmpty()) {
+                throw new RuntimeException("Brand name cannot be null or empty");
+            }
 
-        Optional<Brand> existingBrand = brandRepository.findByName(brandDTO.getName());
-        if (existingBrand.isPresent()) {
-            logger.warn("Duplicate brand detected: {}", brandDTO.getName());
-            throw new DataIntegrityViolationException("Brand with name '" + brandDTO.getName() + "' already exists.");
-        }
+            Optional<Brand> existingBrand = brandRepository.findByName(brandDTO.getName());
+            if (existingBrand.isPresent()) {
+                logger.info("Updating existing brand: {}", brandDTO.getName());
+                return updateBrand(existingBrand.get().getId(), brandDTO);
+            } else {
+                logger.info("Creating new brand: {}", brandDTO.getName());
+                Brand brand = new Brand();
+                brand.setName(brandDTO.getName());
+                return brand;
+            }
+        }).collect(Collectors.toList());
 
-        Brand brand = new Brand();
-        brand.setName(brandDTO.getName());
-
-        return brandRepository.save(brand);
+        return brandRepository.saveAll(brands);
     }
 
+    @Transactional
     public Brand updateBrand(UUID id, BrandDTO brandDTO) {
         logger.info("Updating brand with id: {}", id);
 
@@ -70,11 +77,17 @@ public class BrandService {
                     return new EntityNotFoundException("Brand with id " + id + " not found.");
                 });
 
+        if (existingBrand.getName().equals(brandDTO.getName())) {
+            logger.info("No changes detected for brand with id: {}", id);
+            return existingBrand;
+        }
+
         existingBrand.setName(brandDTO.getName());
 
         return brandRepository.save(existingBrand);
     }
 
+    @Transactional
     public void deleteBrand(UUID id) {
         logger.info("Deleting brand with id: {}", id);
 
@@ -90,7 +103,6 @@ public class BrandService {
     public void deleteAllBrands() {
         logger.warn("Deleting all brands from the database.");
 
-        // Optional: Check if there are brands to delete
         long brandCount = brandRepository.count();
         if (brandCount == 0) {
             logger.warn("No brands found to delete.");
@@ -98,19 +110,12 @@ public class BrandService {
         }
 
         try {
-            // Perform batch deletion of all brands
             brandRepository.deleteAllInBatch();
             logger.info("Successfully deleted all brands from the database.");
         } catch (Exception e) {
             logger.error("Error occurred while deleting all brands: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to delete all brands", e);  // Rethrow or handle accordingly
         }
-    }
-
-    public Long countBrands() {
-        long count = brandRepository.count();
-        logger.info("Total number of brands: {}", count);
-        return count;
     }
 
     public Optional<List<Product>> getProductsByBrandId(UUID brandId) {
