@@ -18,12 +18,10 @@ public class Price {
     @GeneratedValue
     private UUID id;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    @JsonManagedReference
-    private Product product;
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
 
-    @OneToMany(mappedBy = "price", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "price", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<PriceAmount> amounts;
 

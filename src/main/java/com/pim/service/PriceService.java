@@ -6,6 +6,7 @@ import com.pim.model.entity.PriceAmount;
 import com.pim.model.entity.Product;
 import com.pim.repository.PriceRepository;
 import com.pim.exceptions.ResourceNotFoundException;
+import com.pim.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -21,12 +22,14 @@ import java.util.stream.Collectors;
 public class PriceService {
 
     private final PriceRepository priceRepository;
+    private final ProductRepository productRepository;
     private final Logger logger = LoggerFactory.getLogger(PriceService.class);
     private final ProductService productService;
 
-    public PriceService(PriceRepository priceRepository, ProductService productService) {
+    public PriceService(PriceRepository priceRepository, ProductService productService, ProductRepository productRepository) {
         this.priceRepository = priceRepository;
         this.productService = productService;
+        this.productRepository = productRepository;
     }
 
     @Transactional
@@ -38,8 +41,10 @@ public class PriceService {
     @Transactional
     public Price getPriceById(UUID id) {
         logger.info("Fetching price with id: {}", id);
-        return priceRepository.findById(id)
+        Price price = priceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Price not found with id: " + id));
+        logger.info("Price found. Amounts are {}", price.getAmounts());
+        return price;
     }
 
     @Transactional
@@ -50,28 +55,21 @@ public class PriceService {
             throw new ConstraintViolationException("Price amount cannot be null", null);
         }
 
+        // Fetch product by SKU
+        Product product = productRepository.findBySku(priceDTO.getProductSku())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with SKU: " + priceDTO.getProductSku()));
+
         // Check if price for this product already exists
-        Price existingPrice = priceRepository.findByProductSku(priceDTO.getProductSku());
+        Price existingPrice = priceRepository.findByProductId(product.getId());
         if (existingPrice != null) {
             logger.info("Price already exists for product SKU: {}. Using update operation.", priceDTO.getProductSku());
-            return updatePriceByProductSku(priceDTO.getProductSku(), priceDTO);
+            return updatePriceByProductSku(product.getSku(), priceDTO);
         }
 
         // Create a new price
         Price price = convertDtoToEntity(priceDTO);
+        price.setProductId(product.getId());
         return priceRepository.save(price);
-    }
-
-    @Transactional
-    public Price updatePriceByProductSku(String productSku, PriceDTO priceDTO) {
-        Price existingPrice = priceRepository.findByProductSku(productSku);
-        if (existingPrice == null) {
-            throw new ResourceNotFoundException("Price not found for product SKU: " + productSku);
-        }
-
-        Price updatedPrice = convertDtoToEntity(priceDTO);
-        updatedPrice.setId(existingPrice.getId());
-        return priceRepository.save(updatedPrice);
     }
 
     @Transactional
@@ -81,8 +79,7 @@ public class PriceService {
         Price existingPrice = priceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Price with id " + id + " not found."));
 
-        Price updatedPrice = convertDtoToEntity(priceDTO);
-        updatedPrice.setId(existingPrice.getId());
+        Price updatedPrice = updatePriceFromPriceDTO(existingPrice, priceDTO);
 
         return priceRepository.save(updatedPrice);
     }
@@ -96,12 +93,6 @@ public class PriceService {
         }
 
         priceRepository.deleteById(id);
-    }
-
-    @Transactional
-    public Long countPrices() {
-        logger.info("Counting all prices");
-        return priceRepository.count();
     }
 
     @Transactional
@@ -123,6 +114,33 @@ public class PriceService {
         }
     }
 
+
+    private Price updatePriceFromPriceDTO(Price existingPrice, PriceDTO priceDTO) {
+
+        boolean isAmountChanged = !existingPrice.getAmounts().stream()
+                .collect(Collectors.toMap(PriceAmount::getCurrencyCode, PriceAmount::getAmount))
+                .equals(priceDTO.getAmount());
+
+        if (!isAmountChanged) {
+            logger.info("No changes detected for price with id: {}", existingPrice.getId());
+            return existingPrice;
+        } else {
+            logger.info("Updating price with id: {}", existingPrice.getId());
+            Price updatedPrice = new Price();
+            updatedPrice.setProductId(existingPrice.getProductId());
+            updatedPrice.setAmounts(priceDTO.getAmount().entrySet().stream()
+                    .map(entry -> {
+                        PriceAmount priceAmount = new PriceAmount();
+                        priceAmount.setCurrencyCode(entry.getKey());
+                        priceAmount.setAmount(entry.getValue());
+                        priceAmount.setPrice(updatedPrice);
+                        return priceAmount;
+                    })
+                    .collect(Collectors.toList()));
+            return priceRepository.save(updatedPrice);
+        }
+    }
+
     private Price convertDtoToEntity(PriceDTO priceDTO) {
         Price price = new Price();
 
@@ -131,9 +149,10 @@ public class PriceService {
             throw new ConstraintViolationException("Product SKU cannot be null", null);
         }
 
-        // Find and set the product
-        Product product = productService.getProductBySku(priceDTO.getProductSku());
-        price.setProduct(product);
+        // Fetch product by SKU
+        Product product = productRepository.findBySku(priceDTO.getProductSku())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with SKU: " + priceDTO.getProductSku()));
+        price.setProductId(product.getId());
 
         // Create and associate price amounts
         List<PriceAmount> amounts = priceDTO.getAmount().entrySet().stream()
@@ -150,12 +169,40 @@ public class PriceService {
         return price;
     }
 
+    public Price getPriceByProductId(UUID productId) {
+        logger.info("Fetching price by product id: {}", productId);
+
+        return priceRepository.findByProductId(productId);
+    }
+
     @Transactional
-    public List<Price> saveAllPrices(List<PriceDTO> priceDTOs) {
-        logger.info("Saving all prices");
-        List<Price> prices = priceDTOs.stream()
-                .map(this::convertDtoToEntity)
-                .collect(Collectors.toList());
-        return priceRepository.saveAll(prices);
+    public Price updatePriceByProductSku(String productSku, PriceDTO priceDTO) {
+        logger.info("Updating price for product SKU: {}", productSku);
+
+        // Fetch product by SKU
+        Product product = productRepository.findBySku(productSku)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with SKU: " + productSku));
+
+        // Check if price for this product already exists
+        Price existingPrice = priceRepository.findByProductId(product.getId());
+        if (existingPrice == null) {
+            throw new ResourceNotFoundException("Price not found for product SKU: " + productSku);
+        }
+
+        // Update the existing price
+        Price updatedPrice = updatePriceFromPriceDTO(existingPrice, priceDTO);
+        return priceRepository.save(updatedPrice);
+    }
+
+
+    @Transactional
+    public List<Price> createPrices(List<PriceDTO> priceDTOs) {
+        if (priceDTOs == null || priceDTOs.isEmpty()) {
+            throw new IllegalArgumentException("Price data cannot be empty");
+        } else {
+            return priceDTOs.stream()
+                    .map(this::createPrice)
+                    .collect(Collectors.toList());
+        }
     }
 }

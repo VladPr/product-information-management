@@ -32,6 +32,11 @@ public class BrandController {
         return brandService.getBrandById(id);
     }
 
+    @GetMapping("/read/{id}/products")
+    public Optional<List<Product>> getProductsByBrand(@PathVariable UUID id) {
+        return brandService.getProductsByBrandId(id);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<List<Brand>> createBrands(@RequestBody List<BrandDTO> brandDTOs) {
         List<Brand> savedBrands = brandService.createBrands(brandDTOs);
@@ -48,14 +53,8 @@ public class BrandController {
         brandService.deleteBrand(id);
     }
 
-    @GetMapping("/read/{id}/products")
-    public Optional<List<Product>> getProductsByBrand(@PathVariable UUID id) {
-        return brandService.getProductsByBrandId(id);
-    }
-
-    @PostMapping("/batch-upload")
-    public ResponseEntity<List<Brand>> batchUploadBrands(@RequestBody List<Brand> brands) {
-        List<Brand> savedBrands = brandService.saveAllBrands(brands);
-        return ResponseEntity.ok(savedBrands);
+    @DeleteMapping("/delete/delete-all")
+    public void deleteAll() {
+        brandService.deleteAllBrands();
     }
 }

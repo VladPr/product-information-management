@@ -23,7 +23,7 @@ public class ProductNameTranslation {
     @Column(name = "name_translation", nullable = false)
     private String nameTranslation;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", nullable = false)
     @JsonBackReference
     private Product product;

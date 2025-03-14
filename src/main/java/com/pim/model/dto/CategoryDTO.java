@@ -9,6 +9,7 @@ import java.util.Map;
 @Getter
 @Setter
 public class CategoryDTO {
+
     @JsonProperty("categories")
     private Map<String, Map<String, String>> categories; // Map<CategoryName, Map<LangCode, Translation>>
 

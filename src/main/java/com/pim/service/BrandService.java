@@ -77,6 +77,11 @@ public class BrandService {
                     return new EntityNotFoundException("Brand with id " + id + " not found.");
                 });
 
+        if (existingBrand.getName().equals(brandDTO.getName())) {
+            logger.info("No changes detected for brand with id: {}", id);
+            return existingBrand;
+        }
+
         existingBrand.setName(brandDTO.getName());
 
         return brandRepository.save(existingBrand);
@@ -98,7 +103,6 @@ public class BrandService {
     public void deleteAllBrands() {
         logger.warn("Deleting all brands from the database.");
 
-        // Optional: Check if there are brands to delete
         long brandCount = brandRepository.count();
         if (brandCount == 0) {
             logger.warn("No brands found to delete.");
@@ -106,7 +110,6 @@ public class BrandService {
         }
 
         try {
-            // Perform batch deletion of all brands
             brandRepository.deleteAllInBatch();
             logger.info("Successfully deleted all brands from the database.");
         } catch (Exception e) {

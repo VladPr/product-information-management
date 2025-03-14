@@ -59,8 +59,21 @@ public class ProductService {
     @Transactional
     public Product updateProduct(UUID id, ProductDTO productDTO) {
         Product existingProduct = getProductById(id);
-        updateProductFromDTO(existingProduct, productDTO);
-        return productRepository.save(existingProduct);
+
+        boolean isSkuChanged = !existingProduct.getSku().equals(productDTO.getSku());
+        boolean isCategoryChanged = !existingProduct.getCategory().getName().equals(productDTO.getCategoryName());
+        boolean isBrandChanged = !existingProduct.getBrand().getName().equals(productDTO.getBrandName());
+        boolean isSupplierChanged = !existingProduct.getSupplier().getName().equals(productDTO.getSupplierName());
+        boolean isNameTranslationsChanged = !existingProduct.getNameTranslations().equals(createNameTranslations(existingProduct, productDTO.getNameTranslations()));
+        boolean isDescriptionChanged = !existingProduct.getDescriptionTranslations().equals(createDescriptionTranslations(existingProduct, productDTO.getDescription()));
+
+        if (isSkuChanged || isCategoryChanged || isBrandChanged || isSupplierChanged || isNameTranslationsChanged || isDescriptionChanged) {
+            updateProductFromDTO(existingProduct, productDTO);
+            return productRepository.save(existingProduct);
+        } else {
+            logger.info("No changes detected for product with id: {}", id);
+            return existingProduct;
+        }
     }
 
     private void updateProductFromDTO(Product product, ProductDTO productDTO) {

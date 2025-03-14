@@ -23,50 +23,39 @@ public class SupplierController {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping("/read/all")
     public List<Supplier> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public Supplier getSupplierById(@PathVariable UUID id) {
         return supplierService.getSupplierById(id);
     }
 
-
-    @PostMapping
-    public Supplier createSupplier(@RequestBody SupplierDTO supplierDTO) {
-        return supplierService.createSupplier(supplierDTO);
+    @PostMapping("/create")
+    public List<Supplier> createSuppliers(@RequestBody List<SupplierDTO> supplierDTOs) {
+        return supplierService.createSuppliers(supplierDTOs);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Supplier updateSupplier(@PathVariable UUID id, @RequestBody SupplierDTO supplierDTO) {
         return supplierService.updateSupplier(id, supplierDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteSupplier(@PathVariable UUID id) {
         supplierService.deleteSupplier(id);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/delete-all")
     public void deleteAllSuppliers() {
         supplierService.deleteAllSuppliers();
     }
 
-    @GetMapping("/count")
-    public Long countSuppliers() {
-        return supplierService.countSuppliers();
-    }
+//    @GetMapping("/read/{id}/products")
+//    public List<Product> getProductsBySupplier(@PathVariable UUID id) {
+//        return productService.getProductsBySupplierId(id);
+//    }
 
-    @GetMapping("/{id}/products")
-    public List<Product> getProductsBySupplier(@PathVariable UUID id) {
-        return productService.getProductsBySupplierId(id);
-    }
-
-    // Save all suppliers
-    @PostMapping("/batch-upload")
-    public List<Supplier> batchUploadSuppliers(@RequestBody List<SupplierDTO> suppliersDTO) {
-        return supplierService.saveAllSuppliers(suppliersDTO);
-    }
 }

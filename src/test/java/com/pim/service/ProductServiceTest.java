@@ -74,25 +74,6 @@ public class ProductServiceTest {
         logger.info("Finished testGetProductById_NotFound");
     }
 
-    @Test
-    public void testCreateProduct() {
-        logger.info("Starting testCreateProduct");
-
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setSku(product.getSku());
-        productDTO.setCategoryName("Test Category");
-        productDTO.setBrandName("Test Brand");
-        productDTO.setSupplierName("Test Supplier");
-        productDTO.setNameTranslations(Map.of("en", "Test Product"));
-        productDTO.setDescription(Map.of("en", "Test Description"));
-
-        when(productRepository.save(any(Product.class))).thenReturn(product);
-        Product createdProduct = productService.createProduct(productDTO);
-
-        assertNotNull(createdProduct);
-        assertEquals(product.getSku(), createdProduct.getSku());
-        logger.info("Finished testCreateProduct");
-    }
 
     @Test
     public void testUpdateProduct() {

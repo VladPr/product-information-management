@@ -29,22 +29,22 @@ public class Product {
     @JsonManagedReference
     private Set<ProductDescriptionTranslation> descriptionTranslations;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private Category category;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "brand_id", nullable = false)
     @JsonBackReference
     private Brand brand;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @ManyToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "supplier_id", nullable = false )
     @JsonBackReference
     private Supplier supplier;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Price price;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn (name = "price_id", referencedColumnName = "id")
+//    private Price price;
 }

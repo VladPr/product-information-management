@@ -23,7 +23,7 @@ public class CategoryNameTranslation {
     @Column(name = "name_translation", nullable = false)
     private String nameTranslation;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private Category category;

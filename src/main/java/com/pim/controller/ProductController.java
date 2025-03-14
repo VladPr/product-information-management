@@ -19,63 +19,48 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping("/read/all")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public Product getProductById(@PathVariable UUID id) {
         return productService.getProductById(id);
     }
 
-    @PutMapping
-    public Product createProduct(@RequestBody ProductDTO productDTO) {
-        return productService.createProduct(productDTO);
+    @PostMapping("/create")
+    public List<Product> createProducts(@RequestBody List<ProductDTO> productDTOs) {
+        return productService.saveAllProducts(productDTOs);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/update/{id}")
     public Product updateProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO) {
         return productService.updateProduct(id, productDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteProduct(@PathVariable UUID id) {
         productService.deleteProduct(id);
     }
 
-    @GetMapping ("/count")
-    public Long countProducts() {
-        return productService.countProducts();
-    }
-
-//    @PostMapping("/{id}/price")
-//    public Product updateProductPrice(@PathVariable UUID id, @RequestBody Price price) {
-//        return productService.updateProductPrice(id, price);
-//    }
-
-    @GetMapping("/sku/{sku}")
+    @GetMapping("/read/sku/{sku}")
     public Product getProductBySku(@PathVariable String sku) {
         return productService.getProductBySku(sku);
     }
 
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/read/category/{categoryId}")
     public List<Product> getProductsByCategoryId(@PathVariable UUID categoryId) {
         return productService.getProductsByCategoryId(categoryId);
     }
 
-    @GetMapping("/brand/{brandId}")
+    @GetMapping("/read/brand/{brandId}")
     public List<Product> getProductsByBrand(@PathVariable UUID brandId) {
         return productService.getProductsByBrandId(brandId);
     }
 
-    @GetMapping("/supplier/{supplierId}")
+    @GetMapping("/read/supplier/{supplierId}")
     public List<Product> getProductsBySupplier(@PathVariable UUID supplierId) {
         return productService.getProductsBySupplierId(supplierId);
-    }
-
-    @PostMapping ("/batch-upload")
-    public List<Product> batchUploadProducts(@RequestBody List<ProductDTO> productsDTO) {
-        return productService.saveAllProducts(productsDTO);
     }
 }

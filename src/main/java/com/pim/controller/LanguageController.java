@@ -19,45 +19,34 @@ public class LanguageController {
         this.languageService = languageService;
     }
 
-    @GetMapping
+    @GetMapping("/read/all")
     public List<Language> getAllLanguages() {
         return languageService.getAllLanguages();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public Language getLanguageById(@PathVariable UUID id) {
         return languageService.getLanguageById(id);
     }
 
-    @PostMapping
-    public Language createLanguage(@RequestBody LanguageDTO languageDTO) {
-        return languageService.createLanguage(languageDTO);
+    @PostMapping("/create")
+    public List<Language> createLanguages(@RequestBody List<LanguageDTO> languageDTOs) {
+        return languageService.createLanguages(languageDTOs);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Language updateLanguage(@PathVariable UUID id, @RequestBody LanguageDTO languageDTO) {
         return languageService.updateLanguage(id, languageDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteLanguage(@PathVariable UUID id) {
         languageService.deleteLanguage(id);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/delete-all")
     public ResponseEntity<Void> deleteAllLanguages() {
         languageService.deleteAllLanguages();
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/count")
-    public Long countLanguages() {
-        return languageService.countLanguages();
-    }
-
-    @PostMapping("/batch-upload")
-    public ResponseEntity<List<Language>> batchUploadLanguages(@RequestBody List<LanguageDTO> languagesDTO) {
-        List<Language> savedLanguages = languageService.saveAllLanguages(languagesDTO);
-        return ResponseEntity.ok(savedLanguages);
     }
 }

@@ -41,34 +41,67 @@ public class SupplierService {
                 });
     }
 
-    public Supplier createSupplier(SupplierDTO supplierDTO) {
-        logger.info("Attempting to create a new supplier: {}", supplierDTO);
+    @Transactional
+    public List<Supplier> createSuppliers(List<SupplierDTO> supplierDTOs) {
+        logger.info("Attempting to create or update suppliers.");
 
-        if (supplierDTO.getName() == null || supplierDTO.getName().trim().isEmpty()) {
-            throw new ConstraintViolationException("Supplier name cannot be null or empty", null);
-        }
+        List<Supplier> suppliers = supplierDTOs.stream().map(supplierDTO -> {
+            if (supplierDTO.getName() == null || supplierDTO.getName().trim().isEmpty()) {
+                throw new RuntimeException("Supplier name cannot be null or empty");
+            }
 
-        Optional<Supplier> existingSupplier = supplierRepository.findByName(supplierDTO.getName());
-        if (existingSupplier.isPresent()) {
-            logger.warn("Duplicate supplier detected: {}", supplierDTO.getName());
-            throw new DataIntegrityViolationException("Supplier with name '" + supplierDTO.getName() + "' already exists.");
-        }
+            Optional<Supplier> existingSupplier = supplierRepository.findByName(supplierDTO.getName());
+            if (existingSupplier.isPresent()) {
+                logger.info("Updating existing supplier: {}", supplierDTO.getName());
+                return updateSupplier(existingSupplier.get().getId(), supplierDTO);
+            } else {
+                logger.info("Creating new supplier: {}", supplierDTO.getName());
+                Supplier supplier = new Supplier();
+                supplier.setName(supplierDTO.getName());
+                supplier.setAddress(supplierDTO.getAddress());
+                supplier.setPhoneNumber(supplierDTO.getPhoneNumber());
+                supplier.setContactEmail(supplierDTO.getContactEmail());
+                return supplier;
+            }
+        }).collect(Collectors.toList());
 
-        Supplier supplier = convertToEntity(supplierDTO);
-        return supplierRepository.save(supplier);
+        return supplierRepository.saveAll(suppliers);
     }
 
+    @Transactional
     public Supplier updateSupplier(UUID id, SupplierDTO supplierDTO) {
         logger.info("Updating supplier with id: {}", id);
 
         Supplier existingSupplier = supplierRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Supplier with id " + id + " not found."));
 
-        existingSupplier.setName(supplierDTO.getName());
+        boolean isNameChanged = !existingSupplier.getName().equals(supplierDTO.getName());
+        boolean isAddressChanged = !existingSupplier.getAddress().equals(supplierDTO.getAddress());
+        boolean isPhoneNumberChanged = !existingSupplier.getPhoneNumber().equals(supplierDTO.getPhoneNumber());
+        boolean isContactEmailChanged = !existingSupplier.getContactEmail().equals(supplierDTO.getContactEmail());
+
+        if (!isNameChanged && !isAddressChanged && !isPhoneNumberChanged && !isContactEmailChanged) {
+            logger.info("No changes detected for supplier with id: {}", id);
+            return existingSupplier;
+        }
+
+        if (isNameChanged) {
+            existingSupplier.setName(supplierDTO.getName());
+        }
+        if (isAddressChanged) {
+            existingSupplier.setAddress(supplierDTO.getAddress());
+        }
+        if (isPhoneNumberChanged) {
+            existingSupplier.setPhoneNumber(supplierDTO.getPhoneNumber());
+        }
+        if (isContactEmailChanged) {
+            existingSupplier.setContactEmail(supplierDTO.getContactEmail());
+        }
 
         return supplierRepository.save(existingSupplier);
     }
 
+    @Transactional
     public void deleteSupplier(UUID id) {
         logger.info("Attempting to delete supplier with id: {}", id);
 
@@ -84,7 +117,6 @@ public class SupplierService {
     public void deleteAllSuppliers() {
         logger.warn("Deleting all suppliers from the database.");
 
-        // Optional: Check if there are suppliers to delete
         long supplierCount = supplierRepository.count();
         if (supplierCount == 0) {
             logger.warn("No suppliers found to delete.");
@@ -96,26 +128,24 @@ public class SupplierService {
             logger.info("Successfully deleted all suppliers from the database.");
         } catch (Exception e) {
             logger.error("Error occurred while deleting all suppliers: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to delete all suppliers", e);  // Rethrow or handle accordingly
+            throw new RuntimeException("Failed to delete all suppliers", e);
         }
     }
 
-    public Long countSuppliers() {
-        long count = supplierRepository.count();
-        logger.info("Total number of suppliers: {}", count);
-        return count;
-    }
+//    public Long countSuppliers() {
+//        long count = supplierRepository.count();
+//        logger.info("Total number of suppliers: {}", count);
+//        return count;
+//    }
 
-    // Get all products by supplier ID
-    List <Product> getProductsBySupplierId(UUID id) {
-        logger.info("Fetching all products by supplier id: {}", id);
-        return supplierRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.warn("Supplier with id {} not found.", id);
-                    return new EntityNotFoundException("Supplier with id " + id + " not found.");
-                }).getProducts();
-    }
-
+//    public List<Product> getProductsBySupplierId(UUID id) {
+//        logger.info("Fetching all products by supplier id: {}", id);
+//        return supplierRepository.findById(id)
+//                .orElseThrow(() -> {
+//                    logger.warn("Supplier with id {} not found.", id);
+//                    return new EntityNotFoundException("Supplier with id " + id + " not found.");
+//                }).getProducts();
+//    }
 
     private Supplier convertToEntity(SupplierDTO supplierDTO) {
         Supplier supplier = new Supplier();
@@ -126,14 +156,4 @@ public class SupplierService {
 
         return supplier;
     }
-
-    // Save all suppliers
-    public List<Supplier> saveAllSuppliers(List<SupplierDTO> supplierDTOs) {
-        logger.info("Saving all suppliers");
-        List<Supplier> suppliers = supplierDTOs.stream()
-                .map(this::convertToEntity)
-                .collect(Collectors.toList());
-        return supplierRepository.saveAll(suppliers);
-    }
-
 }

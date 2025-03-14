@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,11 +56,12 @@ class LanguageServiceTest {
     }
 
     @Test
-    void testCreateLanguage() {
-        when(languageRepository.save(any(Language.class))).thenReturn(language);
-        Language createdLanguage = languageService.createLanguage(languageDTO);
-        assertEquals(language.getCode(), createdLanguage.getCode());
-        assertEquals(language.getName(), createdLanguage.getName());
+    void testCreateLanguages() {
+        when(languageRepository.saveAll(anyList())).thenReturn(List.of(language));
+        List<Language> createdLanguages = languageService.createLanguages(List.of(languageDTO));
+        assertEquals(1, createdLanguages.size());
+        assertEquals(language.getCode(), createdLanguages.get(0).getCode());
+        assertEquals(language.getName(), createdLanguages.get(0).getName());
     }
 
     @Test
