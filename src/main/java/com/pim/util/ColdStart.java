@@ -93,14 +93,6 @@ public class ColdStart {
         }
     }
 
-    private void queryDatabaseCounts() {
-        queryTableCount("languages");
-        queryTableCount("categories");
-        queryTableCount("brands");
-        queryTableCount("prices");
-        queryTableCount("products");
-        queryTableCount("suppliers");
-    }
 
     private void queryTableCount(String tableName) {
         Long count = webClient.get()

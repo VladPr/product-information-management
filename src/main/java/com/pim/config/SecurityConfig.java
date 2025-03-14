@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,22 +49,20 @@ public class SecurityConfig {
             throw new IllegalStateException("JWT_SECRET_KEY must be at least 32 bytes long after decoding!");
         }
 
-        // ✅ Assign a key ID
         String keyId = "my-key-id";
 
-        // ✅ Build the JWK Key (WITHOUT `.keyType(KeyType.OCT)`)
+
         OctetSequenceKey jwk = new OctetSequenceKey.Builder(keyBytes)
                 .keyID(keyId)
                 .algorithm(JWSAlgorithm.HS256)
                 .build();
 
-        // ✅ Create JWK Set
+
         JWKSet jwkSet = new JWKSet(jwk);
 
-        // ✅ Ensure Nimbus selects the correct key
+
         JWKSource<SecurityContext> jwkSource = (selector, context) -> selector.select(jwkSet);
 
-        // ✅ Debugging: Print selected key
         List<JWK> matchingKeys = jwkSet.getKeys();
         if (matchingKeys.isEmpty()) {
             throw new IllegalStateException("No matching keys found in JWK Set!");
@@ -76,9 +75,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/v3/api-docs").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/auth/token").permitAll()
                         .requestMatchers("/users/register").permitAll()
                         .requestMatchers("/api/products/read/**").hasAnyRole("CUSTOMER", "ADMIN")
