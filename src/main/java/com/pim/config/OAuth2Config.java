@@ -15,8 +15,8 @@ public class OAuth2Config {
     @Bean
     public UserDetailsService users() {
         return new InMemoryUserDetailsManager(
-                createUser("admin", "admin", "ADMIN"),
-                createUser("customer", "customer", "CUSTOMER")
+                createUser("AdminUser", "adminpass", "ADMIN"),
+                createUser("CustomerUser", "CustomerPass", "CUSTOMER")
         );
     }
 
