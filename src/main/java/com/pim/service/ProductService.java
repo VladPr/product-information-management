@@ -1,6 +1,6 @@
 package com.pim.service;
 
-import com.pim.exceptions.ResourceNotFoundException;
+import com.pim.exception.ResourceNotFoundException;
 import com.pim.model.dto.ProductDTO;
 import com.pim.model.entity.*;
 import com.pim.repository.*;

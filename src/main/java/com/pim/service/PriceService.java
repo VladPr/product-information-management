@@ -5,7 +5,7 @@ import com.pim.model.entity.Price;
 import com.pim.model.entity.PriceAmount;
 import com.pim.model.entity.Product;
 import com.pim.repository.PriceRepository;
-import com.pim.exceptions.ResourceNotFoundException;
+import com.pim.exception.ResourceNotFoundException;
 import com.pim.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
