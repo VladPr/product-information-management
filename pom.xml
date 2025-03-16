@@ -56,7 +56,6 @@
 			<version>9.47</version>  <!-- Make sure this is up to date -->
 		</dependency>
 
-		<!-- ✅ SpringDoc (Swagger UI for API Documentation) -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -152,6 +151,18 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>3.2.2</version>
+				<configuration>
+					<jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>start</goal>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+
 			</plugin>
 
 			<!-- ✅ SpringDoc OpenAPI Plugin (Swagger) -->
@@ -169,8 +180,8 @@
 				</executions>
 				<configuration>
 					<apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
-					<outputFileName>openapi.json</outputFileName>
-					<outputDir>${project.build.directory}</outputDir>
+					<outputFileName>openapi.yaml</outputFileName>
+					<outputDir>${project.basedir}/docs</outputDir>
 				</configuration>
 			</plugin>
 		</plugins>

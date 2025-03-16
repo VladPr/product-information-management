@@ -4,6 +4,7 @@ import com.pim.model.dto.CategoryDTO;
 import com.pim.model.entity.Category;
 import com.pim.model.entity.CategoryNameTranslation;
 import com.pim.repository.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +31,8 @@ public class CategoryService {
     }
 
     public Category getCategoryById(UUID id) {
-        logger.info("Fetching category with id: {}", id);
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found: " + id));
     }
 
     @Transactional
@@ -120,28 +120,4 @@ public class CategoryService {
         }
     }
 
-    public Long countCategories() {
-        logger.info("Counting all categories");
-        return categoryRepository.count();
-    }
-
-    public CategoryDTO convertCategoryToDTO(List<Category> categories) {
-        Map<String, Map<String, String>> categoryMap = categories.stream()
-                .collect(Collectors.toMap(
-                        category -> category.getNameTranslations().stream()
-                                .filter(translation -> "en".equals(translation.getLanguageCode())) // Default to English name
-                                .findFirst()
-                                .map(CategoryNameTranslation::getNameTranslation)
-                                .orElse(UUID.randomUUID().toString()), // Fallback if no English name exists
-                        category -> category.getNameTranslations().stream()
-                                .collect(Collectors.toMap(
-                                        CategoryNameTranslation::getLanguageCode,
-                                        CategoryNameTranslation::getNameTranslation
-                                ))
-                ));
-
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setCategories(categoryMap);
-        return categoryDTO;
-    }
 }

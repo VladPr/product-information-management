@@ -2,13 +2,17 @@ package com.pim.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "product_description_translation")
 public class ProductDescriptionTranslation {
@@ -31,6 +35,4 @@ public class ProductDescriptionTranslation {
         this.product = product;
     }
 
-    public ProductDescriptionTranslation() {
-    }
 }

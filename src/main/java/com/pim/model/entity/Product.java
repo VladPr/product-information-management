@@ -3,7 +3,9 @@ package com.pim.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
@@ -11,6 +13,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Product {
 
@@ -44,7 +48,11 @@ public class Product {
     @JsonBackReference
     private Supplier supplier;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn (name = "price_id", referencedColumnName = "id")
-//    private Price price;
+    public Product(UUID id, String sku, Category category, Brand brand, Supplier supplier) {
+        this.id = id;
+        this.sku = sku;
+        this.category = category;
+        this.brand = brand;
+        this.supplier = supplier;
+    }
 }

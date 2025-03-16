@@ -61,11 +61,12 @@ public class SupplierService {
                 supplier.setAddress(supplierDTO.getAddress());
                 supplier.setPhoneNumber(supplierDTO.getPhoneNumber());
                 supplier.setContactEmail(supplierDTO.getContactEmail());
-                return supplier;
+
+                return supplierRepository.save(supplier);
             }
         }).collect(Collectors.toList());
 
-        return supplierRepository.saveAll(suppliers);
+        return suppliers;
     }
 
     @Transactional

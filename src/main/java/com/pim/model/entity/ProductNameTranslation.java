@@ -2,13 +2,17 @@ package com.pim.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "product_name_translation")
 public class ProductNameTranslation {
@@ -27,10 +31,6 @@ public class ProductNameTranslation {
     @JoinColumn(name = "product_id", nullable = false)
     @JsonBackReference
     private Product product;
-
-
-    public ProductNameTranslation() {
-    }
 
     public ProductNameTranslation(String languageCode, String nameTranslation, Product product) {
         this.languageCode = languageCode;

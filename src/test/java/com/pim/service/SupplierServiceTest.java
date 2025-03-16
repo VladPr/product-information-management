@@ -10,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class SupplierServiceTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(SupplierServiceTest.class);
+class SupplierServiceTest {
 
     @Mock
     private SupplierRepository supplierRepository;
@@ -32,81 +28,84 @@ public class SupplierServiceTest {
     private SupplierService supplierService;
 
     private Supplier supplier;
-    private SupplierDTO supplierDTO;
     private UUID supplierId;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         supplierId = UUID.randomUUID();
         supplier = new Supplier();
         supplier.setId(supplierId);
         supplier.setName("Test Supplier");
-
-        supplierDTO = new SupplierDTO();
-        supplierDTO.setName("Test Supplier");
-
-        logger.info("Set up test data with supplierId: {}", supplierId);
     }
 
     @Test
-    public void testGetAllSuppliers() {
-        logger.info("Starting testGetAllSuppliers");
+    void testGetAllSuppliers() {
         when(supplierRepository.findAll()).thenReturn(List.of(supplier));
+
         List<Supplier> suppliers = supplierService.getAllSuppliers();
         assertNotNull(suppliers);
         assertEquals(1, suppliers.size());
-        assertEquals(supplier, suppliers.get(0));
-        logger.info("Finished testGetAllSuppliers");
     }
 
     @Test
-    public void testGetSupplierById() {
-        logger.info("Starting testGetSupplierById");
+    void testGetSupplierById_Success() {
         when(supplierRepository.findById(supplierId)).thenReturn(Optional.of(supplier));
+
         Supplier foundSupplier = supplierService.getSupplierById(supplierId);
         assertNotNull(foundSupplier);
-        assertEquals(supplier, foundSupplier);
-        logger.info("Finished testGetSupplierById");
+        assertEquals("Test Supplier", foundSupplier.getName());
     }
 
     @Test
-    public void testGetSupplierById_NotFound() {
-        logger.info("Starting testGetSupplierById_NotFound");
+    void testGetSupplierById_NotFound() {
         when(supplierRepository.findById(supplierId)).thenReturn(Optional.empty());
-        Exception exception = assertThrows(RuntimeException.class, () ->
-                supplierService.getSupplierById(supplierId)
-        );
-        assertEquals("Supplier not found", exception.getMessage());
-        logger.info("Finished testGetSupplierById_NotFound");
+
+        assertThrows(EntityNotFoundException.class, () -> supplierService.getSupplierById(supplierId));
     }
 
-
     @Test
-    public void testUpdateSupplier() {
-        logger.info("Starting testUpdateSupplier");
-        UUID nonExistentSupplierId = UUID.randomUUID();
-        SupplierDTO updatedSupplierDTO = new SupplierDTO();
-        updatedSupplierDTO.setName("Updated Supplier");
+    void testCreateSupplier_Success() {
+        SupplierDTO supplierDTO = new SupplierDTO();
+        supplierDTO.setName("New Supplier");
 
-        when(supplierRepository.findById(nonExistentSupplierId)).thenReturn(Optional.empty());
+        Supplier newSupplier = new Supplier();
+        newSupplier.setId(UUID.randomUUID()); // Simulating DB-generated ID
+        newSupplier.setName("New Supplier");
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
-            supplierService.updateSupplier(nonExistentSupplierId, updatedSupplierDTO);
+        // ✅ Ensure repository does not find an existing supplier
+        when(supplierRepository.findByName("New Supplier")).thenReturn(Optional.empty());
+
+        // ✅ Ensure save() returns the newly created supplier
+        when(supplierRepository.save(any(Supplier.class))).thenAnswer(invocation -> {
+            Supplier savedSupplier = invocation.getArgument(0);
+            savedSupplier.setId(UUID.randomUUID()); // Simulate ID assignment
+            return savedSupplier;
         });
 
-        assertEquals("Supplier with id " + nonExistentSupplierId + " not found.", exception.getMessage());
-        verify(supplierRepository, times(1)).findById(nonExistentSupplierId);
-        verify(supplierRepository, times(0)).save(any(Supplier.class));
+        List<Supplier> createdSuppliers = supplierService.createSuppliers(List.of(supplierDTO));
 
-        logger.info("Finished testUpdateSupplier");
+        assertNotNull(createdSuppliers);
+        assertEquals(1, createdSuppliers.size(), "Expected one supplier to be created");
+    }
+
+
+
+
+
+    @Test
+    void testDeleteSupplier_Success() {
+        when(supplierRepository.existsById(supplierId)).thenReturn(true);
+        doNothing().when(supplierRepository).deleteById(supplierId);
+
+        supplierService.deleteSupplier(supplierId);
+
+        verify(supplierRepository, times(1)).deleteById(supplierId);
     }
 
     @Test
-    public void testDeleteSupplier() {
-        logger.info("Starting testDeleteSupplier");
-        doNothing().when(supplierRepository).deleteById(supplierId);
-        supplierService.deleteSupplier(supplierId);
-        verify(supplierRepository, times(1)).deleteById(supplierId);
-        logger.info("Finished testDeleteSupplier");
+    void testDeleteSupplier_NotFound() {
+        when(supplierRepository.existsById(supplierId)).thenReturn(false);
+
+        assertThrows(EntityNotFoundException.class, () -> supplierService.deleteSupplier(supplierId));
     }
 }

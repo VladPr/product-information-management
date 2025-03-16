@@ -2,13 +2,17 @@ package com.pim.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "category_name_translation")
 public class CategoryNameTranslation {
@@ -27,9 +31,6 @@ public class CategoryNameTranslation {
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private Category category;
-
-    public CategoryNameTranslation() {
-    }
 
     public CategoryNameTranslation(String languageCode, String nameTranslation, Category category) {
         this.languageCode = languageCode;
