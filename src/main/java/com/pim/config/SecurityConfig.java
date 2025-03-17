@@ -83,7 +83,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/auth/token").permitAll()
                         .requestMatchers("/users/register").permitAll()
-                        .requestMatchers("/api/products/read/**").hasAnyRole("CUSTOMER", "ADMIN")
+                        .requestMatchers("/api/*/read/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .requestMatchers("/api/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
