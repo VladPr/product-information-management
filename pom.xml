@@ -23,7 +23,7 @@
 	</properties>
 
 	<dependencies>
-		<!-- 🌟 Core Spring Boot Dependencies -->
+		<!-- Core Spring Boot Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -39,7 +39,7 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
-		<!-- ✅ OAuth2 Security (Authentication & Authorization) -->
+		<!-- OAuth2 Security (Authentication & Authorization) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
@@ -62,7 +62,7 @@
 			<version>2.3.0</version>
 		</dependency>
 
-		<!-- ✅ Database Dependencies -->
+		<!-- Database Dependencies -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -75,21 +75,21 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- ✅ Lombok (Avoid Boilerplate Code) -->
+		<!-- Lombok (Avoid Boilerplate Code) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 
-		<!-- ✅ Jakarta Persistence API -->
+		<!-- Jakarta Persistence API -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
 
-		<!-- ✅ Servlet API -->
+		<!-- Servlet API -->
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
@@ -97,7 +97,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- ✅ Testing Dependencies -->
+		<!-- Testing Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -111,13 +111,13 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- ✅ WebFlux (For Reactive Support, Optional) -->
+		<!--  WebFlux (For Reactive Support, Optional) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 
-		<!-- ✅ Netty Resolver for MacOS -->
+		<!--  Netty Resolver for MacOS -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-resolver-dns-native-macos</artifactId>
@@ -128,7 +128,7 @@
 
 	<build>
 		<plugins>
-			<!-- ✅ Maven Compiler Plugin -->
+			<!--  Maven Compiler Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -146,7 +146,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- ✅ Spring Boot Maven Plugin -->
+			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -162,10 +162,9 @@
 						</goals>
 					</execution>
 				</executions>
-
 			</plugin>
 
-			<!-- ✅ SpringDoc OpenAPI Plugin (Swagger) -->
+			<!-- SpringDoc OpenAPI Plugin (Swagger) -->
 			<plugin>
 				<groupId>org.springdoc</groupId>
 				<artifactId>springdoc-openapi-maven-plugin</artifactId>
