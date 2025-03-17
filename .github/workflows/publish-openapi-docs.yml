@@ -3,7 +3,7 @@ name: Deploy OpenAPI Docs to GitHub Pages
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   deploy:
@@ -13,14 +13,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Copy OpenAPI Docs to Public Directory
-        run: |
-          mkdir -p public
-          cp docs/openapi.yaml public/
-
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: public  # Uploads `docs/openapi.yaml` to GitHub Pages
-
+          folder: docs  # ✅ Deploys only `docs/openapi.yaml`
