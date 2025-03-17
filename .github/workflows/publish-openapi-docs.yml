@@ -22,5 +22,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: public  # Uploads `public/openapi.yaml` to GitHub Pages
+          folder: public  # Uploads `docs/openapi.yaml` to GitHub Pages
 
