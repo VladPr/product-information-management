@@ -22,6 +22,7 @@ jobs:
 
       - name: Copy OpenAPI Spec
         run: |
+          cp docs/index.html public/index.html
           cp docs/openapi.yaml public/openapi.yaml
 
       - name: Configure Swagger UI to Use Your OpenAPI Spec
