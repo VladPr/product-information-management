@@ -10,6 +10,12 @@
 
 ---
 
+## 🌍 **📄 API Documentation**
+📌 The API is fully documented using **Swagger UI**.  
+👉 **Live API Docs:** **[Click Here](https://vladpr.github.io/product-information-management/)**  
+
+---
+
 ## 🌟 **Tech Stack**
 | Technology       | Version |
 |-----------------|---------|
