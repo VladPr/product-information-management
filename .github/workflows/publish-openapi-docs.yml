@@ -13,8 +13,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Download Swagger UI
+        run: |
+          mkdir -p public
+          wget https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.11.0.tar.gz
+          tar -xzf v5.11.0.tar.gz --strip-components=1 -C public
+          rm v5.11.0.tar.gz
+
+      - name: Set OpenAPI Spec URL
+        run: |
+          sed -i 's|"https://petstore.swagger.io/v2/swagger.json"|"https://raw.githubusercontent.com/VladPr/product-information-management/main/docs/openapi.yaml"|' public/index.html
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: docs
+          folder: public
