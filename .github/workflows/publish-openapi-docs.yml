@@ -13,6 +13,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y wget tar
+
       - name: Download Swagger UI
         run: |
           mkdir -p public
@@ -22,7 +25,11 @@ jobs:
 
       - name: Set OpenAPI Spec URL
         run: |
-          sed -i 's|"https://petstore.swagger.io/v2/swagger.json"|"https://raw.githubusercontent.com/VladPr/product-information-management/main/docs/openapi.yaml"|' public/index.html
+          if [ -f "public/index.html" ]; then
+            sed -i 's|url: "https://petstore.swagger.io/v2/swagger.json"|url: "https://raw.githubusercontent.com/VladPr/product-information-management/main/docs/openapi.yaml"|' public/index.html
+          else
+            echo "Error: public/index.html not found!" && exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
