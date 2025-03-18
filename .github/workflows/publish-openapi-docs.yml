@@ -23,6 +23,9 @@ jobs:
           tar -xzf v5.11.0.tar.gz --strip-components=1 -C public
           rm v5.11.0.tar.gz
 
+      - name: List Extracted Files (Debugging)
+        run: ls -R public
+      
       - name: Set OpenAPI Spec URL
         run: |
           if [ -f "public/index.html" ]; then
