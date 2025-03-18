@@ -23,7 +23,7 @@ jobs:
           tar -xzf v5.11.0.tar.gz --strip-components=1 -C public
           rm v5.11.0.tar.gz
 
-      - name: Debug: List Extracted Files
+      - name: Debug List Extracted Files
         run: ls -R public
 
       - name: Set OpenAPI Spec URL
